@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="download.js"></script>
 <style>
 
 h1 {
@@ -53,34 +54,10 @@ label {
     <label id="lab"> Click button to start writing. </label>
     <input type ="button" value="Start" id="start" onclick="buttonPress()" required>
     <p id="demo"> </p>
-    <input type ="button" value="Download" id="download" onclick="saveTextAsFile(inputt.value, 'download.txt')" required> 
+    <input type ="button" value="Download" id="download" onclick="download(inputt.value, 'download.txt')" required> 
     <textarea id="inputt"></textarea>
     <script>
 
-function saveTextAsFile(textToWrite, fileNameToSaveAs)
-    {
-    	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
-    	var downloadLink = document.createElement("a");
-    	downloadLink.download = fileNameToSaveAs;
-    	downloadLink.innerHTML = "Download File";
-    	if (window.webkitURL != null)
-    	{
-    		// Chrome allows the link to be clicked
-    		// without actually adding it to the DOM.
-    		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    	}
-    	else
-    	{
-    		// Firefox requires the link to be added to the DOM
-    		// before it can be clicked.
-    		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-    		downloadLink.onclick = destroyClickedElement;
-    		downloadLink.style.display = "none";
-    		document.body.appendChild(downloadLink);
-    	}
-    
-    	downloadLink.click();
-    }
     // The data/time we want to countdown to
     function buttonPress() {
     var sec = 300;
