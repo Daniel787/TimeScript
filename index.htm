@@ -43,6 +43,9 @@ label {
     height: 800px;
     width: 960px;
 }
+#download {
+    display: none;
+}
 </style>
 </head>
 <body>
@@ -50,8 +53,34 @@ label {
     <label id="lab"> Click button to start writing. </label>
     <input type ="button" value="Start" id="start" onclick="buttonPress()" required>
     <p id="demo"> </p>
+    <input type ="button" value="Download" id="download" onclick="saveTextAsFile(inputt.value, 'download.txt')" required> 
     <textarea id="inputt"></textarea>
     <script>
+
+function saveTextAsFile(textToWrite, fileNameToSaveAs)
+    {
+    	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
+    	var downloadLink = document.createElement("a");
+    	downloadLink.download = fileNameToSaveAs;
+    	downloadLink.innerHTML = "Download File";
+    	if (window.webkitURL != null)
+    	{
+    		// Chrome allows the link to be clicked
+    		// without actually adding it to the DOM.
+    		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    	}
+    	else
+    	{
+    		// Firefox requires the link to be added to the DOM
+    		// before it can be clicked.
+    		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    		downloadLink.onclick = destroyClickedElement;
+    		downloadLink.style.display = "none";
+    		document.body.appendChild(downloadLink);
+    	}
+    
+    	downloadLink.click();
+    }
     // The data/time we want to countdown to
     function buttonPress() {
     var sec = 300;
@@ -61,6 +90,8 @@ label {
     document.getElementById("start").style.visibility = "hidden";
     document.getElementById("start").style.display = "none";
     document.getElementById("inputt").style.visibility = "visible";
+    document.getElementById("download").style.visibility = "visible";
+    document.getElementById("download").style.display= "block";
     var x = setInterval(function () {
         var minutes = Math.floor(sec / 60);
         var disSec = sec % 60;
@@ -68,6 +99,7 @@ label {
         if (sec < 0) {
           clearInterval(x);     
           document.getElementById("demo").innerHTML = "FINISHED"; 
+          document.getElementById("inputt").readOnly = true;
         }
         sec--;
     }, 1000)
